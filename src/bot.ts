@@ -24,7 +24,7 @@ bot.filter((ctx) => ctx.hasChatType("private") && config.admin === ctx.from.id)
     const id = await tg.create(info, ctx.match[1]);
     await st.set_post(id, ctx.match[1]);
 
-    await ctx.reply("✔анонс создан");
+    await ctx.reply("✅ анонс создан");
   });
 
 bot.catch((err) => {
