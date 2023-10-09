@@ -16,7 +16,7 @@ export type PostState = {
 };
 
 export type Config = {
-  admin: number;
+  admin: number[];
   db: Deno.Kv;
   telegram: {
     token?: string;

@@ -19,7 +19,7 @@ async function getConfig(): Promise<Config> {
   const map = isDenoDeploy() ? Deno.env : env_map;
 
   return {
-    admin: Number(map.get("ADMIN")),
+    admin: map.get("ADMIN")!.split(",").map((item) => Number(item)),
     db: await Deno.openKv(db),
     telegram: {
       token: map.get("TELEGRAM_TOKEN"),
