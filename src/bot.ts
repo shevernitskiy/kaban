@@ -8,12 +8,6 @@ import { config } from "./config.ts";
 
 export const bot = new Bot(config.telegram.token!);
 
-bot.on("message:text", async (ctx) => {
-  if (ctx.hasChatType("private") && ctx.message.text === "ping") {
-    await ctx.reply("pong");
-  }
-});
-
 bot.filter((ctx) => ctx.hasChatType("private") && config.admin.includes(ctx.from.id))
   .hears(/[А|а]нонс[\s]*(.*)*/, async (ctx) => {
     const tw = new Twitch(config.twitch.channel!);
