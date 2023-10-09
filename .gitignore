@@ -1,0 +1,5 @@
+kv.db
+kv.db-shm
+kv.db-wal
+.env
+.vscode/tasks.json

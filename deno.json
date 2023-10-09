@@ -1,0 +1,11 @@
+{
+  "lock": false,
+  "fmt": {
+    "lineWidth": 120
+  },
+  "imports": {
+    "grammy": "https://deno.land/x/grammy@v1.19.1/mod.ts",
+    "timediff": "https://deno.land/std@0.201.0/datetime/difference.ts",
+    "nhttp": "https://deno.land/x/nhttp@1.3.12/mod.ts"
+  }
+}
