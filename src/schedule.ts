@@ -25,6 +25,17 @@ export async function schedule(): Promise<void> {
         await st.set_post(0);
         await st.set_offline_counter(0);
         return;
+      } else {
+        let delete_counter = await st.get_delete_counter();
+        delete_counter++;
+        console.info(`[delete] counter ${delete_counter}`);
+        if (delete_counter >= 3) {
+          await st.set_post(0);
+          await st.set_offline_counter(0);
+          await st.set_delete_counter(0);
+        } else {
+          await st.set_delete_counter(delete_counter);
+        }
       }
     } else {
       counter++;
