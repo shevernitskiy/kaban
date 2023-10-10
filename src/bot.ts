@@ -26,6 +26,8 @@ bot.filter((ctx) => ctx.hasChatType("private") && config.admin.includes(ctx.from
     await st.set_offline_counter(0);
 
     await ctx.reply("✅ анонс создан");
+
+    console.info(`[create] post ${id} - ${ctx.match[1]}`);
   });
 
 bot.catch((err) => {

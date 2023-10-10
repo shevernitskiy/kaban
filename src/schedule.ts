@@ -20,6 +20,7 @@ export async function schedule(): Promise<void> {
     let counter = await st.get_offline_counter();
     if (counter >= 2) {
       const result = await tg.delete(state.id);
+      console.info(`[delete] result ${result}`);
       if (result <= 0) {
         await st.set_post(0);
         await st.set_offline_counter(0);
