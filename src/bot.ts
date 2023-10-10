@@ -18,7 +18,8 @@ bot.filter((ctx) => ctx.hasChatType("private") && config.admin.includes(ctx.from
     const state = await st.get_post();
 
     if (state && state.id > 0) {
-      await tg.delete(state.id);
+      const result = await tg.delete(state.id);
+      console.info(`[delete] result ${result}`);
     }
 
     const id = await tg.create(info, ctx.match[1]);
