@@ -3,6 +3,10 @@ import { webhookCallback } from "grammy";
 import { schedule } from "./schedule.ts";
 import { bot } from "./bot.ts";
 
+Deno.cron("reload", "*/2 * * * *", async () => {
+  await schedule();
+});
+
 const app = nhttp();
 const handler = webhookCallback(bot, "std/http");
 
