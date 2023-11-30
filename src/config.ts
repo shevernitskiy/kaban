@@ -15,7 +15,6 @@ async function getConfig(): Promise<Config> {
       env_map.set(kv[0].trim(), kv[1].trim());
     }
   }
-
   const map = isDenoDeploy() ? Deno.env : env_map;
 
   return {
