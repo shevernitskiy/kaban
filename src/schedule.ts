@@ -48,6 +48,7 @@ export async function schedule(): Promise<void> {
 
   if (state.id > 0 && info.online) {
     const id = await tg.update(info, state.id, state.title);
+    console.log(`[update] post ${id}`);
     if (id < 0) {
       await st.set_post(0);
       await st.set_offline_counter(0);

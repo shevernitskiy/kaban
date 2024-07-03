@@ -8,7 +8,7 @@ Deno.cron("reload", "*/2 * * * *", async () => {
 });
 
 const app = nhttp();
-const handler = webhookCallback(bot, "std/http");
+const handler = webhookCallback(bot, "nhttp");
 
 app.get("/", () => {
   return "Ok";
@@ -20,7 +20,7 @@ app.get("/schedule", async () => {
 });
 
 app.post("/telegram", async (rev) => {
-  await handler(rev.newRequest);
+  await handler(rev);
   return "Ok, telegram";
 });
 
