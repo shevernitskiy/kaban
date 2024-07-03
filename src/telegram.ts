@@ -45,12 +45,10 @@ export class Telegram {
       );
       return typeof res == "boolean" ? message_id : res.message_id;
     } catch (err) {
-      console.error("failed to update message", err.message);
-      if (err.message.includes("MESSAGE_ID_INVALID")) {
-        console.error("id = -1");
+      console.error("failed to update message:", err.message);
+      if (err.message.includes("MESSAGE_ID_INVALID") || err.message.includes("message to edit not found")) {
         return -1;
       } else {
-        console.error("id = message_id");
         return message_id;
       }
     }
