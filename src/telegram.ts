@@ -32,18 +32,25 @@ export class Telegram {
   async update(stream_info: StreamInfo, message_id: MessageId, title?: string): Promise<MessageId> {
     try {
       const img = stream_info.preview ? `${stream_info.preview}?dt=${Date.now()}` : DEFAULT_PREVIEW;
-      const res = await this.api.editMessageMedia(this.channel_id, message_id, {
-        type: "photo",
-        media: img,
-        caption: this.createMessage(stream_info, title ?? "Стрим идёт, присоединяйся!"),
-        parse_mode: "HTML",
-      }, { reply_markup: this.button() });
+      const res = await this.api.editMessageMedia(
+        this.channel_id,
+        message_id,
+        {
+          type: "photo",
+          media: img,
+          caption: this.createMessage(stream_info, title ?? "Стрим идёт, присоединяйся!"),
+          parse_mode: "HTML",
+        },
+        { reply_markup: this.button() },
+      );
       return typeof res == "boolean" ? message_id : res.message_id;
     } catch (err) {
       console.error("failed to update message");
       if (err.message.includes("MESSAGE_ID_INVALID")) {
+        console.error("id = -1");
         return -1;
       } else {
+        console.error("id = -1");
         return message_id;
       }
     }

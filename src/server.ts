@@ -1,4 +1,4 @@
-import nhttp from "nhttp";
+import nhttp from "@nhttp/nhttp";
 import { webhookCallback } from "grammy";
 import { schedule } from "./schedule.ts";
 import { bot } from "./bot.ts";
