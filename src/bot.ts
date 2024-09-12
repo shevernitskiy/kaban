@@ -10,6 +10,12 @@ export const bot = new Bot(config.telegram.token!);
 
 bot
   .filter((ctx) => ctx.hasChatType("private") && config.admin.includes(ctx.from.id))
+  .hears("ping", async (ctx) => {
+    await ctx.reply("pong");
+  })
+  .hears("pong", async (ctx) => {
+    await ctx.reply("ping");
+  })
   .hears(/[А|а]нонс[\s]*(.*)*/, async (ctx) => {
     const tw = new Twitch(config.twitch.channel!);
     const tg = new Telegram(config.telegram.token!, config.telegram.channel_id!, config.twitch.channel!);
