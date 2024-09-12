@@ -8,15 +8,26 @@ import { config } from "./config.ts";
 
 export const bot = new Bot(config.telegram.token!);
 
-bot
-  .filter((ctx) => ctx.hasChatType("private") && config.admin.includes(ctx.from.id))
-  .hears("ping", async (ctx) => {
+bot.on("message", async (ctx) => {
+  if (!ctx.hasChatType("private") || !config.admin.includes(ctx.from.id)) return;
+
+  const text = ctx.message?.text ?? ctx.message?.caption;
+
+  if (text === "ping") {
+    console.info(`[ping] ${ctx.from.id}`);
     await ctx.reply("pong");
-  })
-  .hears("pong", async (ctx) => {
+    return;
+  }
+
+  if (text === "pong") {
+    console.info(`[pong] ${ctx.from.id}`);
     await ctx.reply("ping");
-  })
-  .hears(/[А|а]нонс[\s]*(.*)*/, async (ctx) => {
+    return;
+  }
+
+  if (text?.startsWith("анонс") || text?.startsWith("Анонс")) {
+    console.log("here");
+    const text_strip = text.replace("анонс", "").replace("Анонс", "").trim();
     const tw = new Twitch(config.twitch.channel!);
     const tg = new Telegram(config.telegram.token!, config.telegram.channel_id!, config.twitch.channel!);
     const st = new State(config.db);
@@ -29,14 +40,16 @@ bot
       console.info(`[delete] result ${result}`);
     }
 
-    const id = await tg.create(info, ctx.match[1]);
-    await st.set_post(id, ctx.match[1]);
+    const id = await tg.create(info, text_strip);
+    await st.set_post(id, text);
     await st.set_offline_counter(0);
 
     await ctx.reply("✅ анонс создан");
+    console.info(`[create] post ${id} - ${text_strip}`);
 
-    console.info(`[create] post ${id} - ${ctx.match[1]}`);
-  });
+    return;
+  }
+});
 
 bot.catch((err) => {
   console.error(`Error while handling update ${err.ctx.update.update_id}:`);

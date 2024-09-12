@@ -6,7 +6,7 @@
   "imports": {
     "@nhttp/nhttp": "jsr:@nhttp/nhttp@^2.0.2",
     "@std/datetime": "jsr:@std/datetime@^0.224.2",
-    "grammy": "https://deno.land/x/grammy@v1.26.0/mod.ts"
+    "grammy": "https://deno.land/x/grammy@v1.29.0/mod.ts"
   },
   "deploy": {
     "project": "ab91130b-5ef4-4b3d-a28f-b78f428a22df",

@@ -22,8 +22,8 @@ export class Twitch {
         this.request.VideoPreviewOverlay(this.channel_name),
       ]);
       return this.response.StreamInfo(data);
-    } catch (_err) {
-      console.error(`[${this.name}] unbale to fetch data from twitch api`);
+    } catch (err) {
+      console.error(`[${this.name}] unbale to fetch data from twitch api`, err);
       return {
         online: false,
         viewers: 0,

@@ -23,8 +23,8 @@ export class Telegram {
         parse_mode: "HTML",
       });
       return res.message_id;
-    } catch (_err) {
-      console.error("failed to create message");
+    } catch (err) {
+      console.error("failed to create message", err);
       return 0;
     }
   }
