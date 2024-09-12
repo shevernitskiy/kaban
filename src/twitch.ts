@@ -14,15 +14,13 @@ export class Twitch {
 
   async fetch(): Promise<StreamInfo> {
     try {
-      const data = await this.gql(
-        [
-          this.request.VideoPlayerStatusOverlayChannel(this.channel_name),
-          this.request.UseViewCount(this.channel_name),
-          this.request.ComscoreStreamingQuery(this.channel_name),
-          this.request.NielsenContentMetadata(this.channel_name),
-          this.request.VideoPreviewOverlay(this.channel_name),
-        ],
-      );
+      const data = await this.gql([
+        this.request.VideoPlayerStatusOverlayChannel(this.channel_name),
+        this.request.UseViewCount(this.channel_name),
+        this.request.ComscoreStreamingQuery(this.channel_name),
+        this.request.NielsenContentMetadata(this.channel_name),
+        this.request.VideoPreviewOverlay(this.channel_name),
+      ]);
       return this.response.StreamInfo(data);
     } catch (_err) {
       console.error(`[${this.name}] unbale to fetch data from twitch api`);
@@ -37,18 +35,14 @@ export class Twitch {
   }
 
   private async gql(execute: unknown[]): Promise<unknown[]> {
-    try {
-      const res = await fetch(GQL_URL, {
-        headers: { "Client-Id": CLIENT_ID },
-        method: "POST",
-        body: JSON.stringify(execute),
-      });
+    const res = await fetch(GQL_URL, {
+      headers: { "Client-Id": CLIENT_ID },
+      method: "POST",
+      body: JSON.stringify(execute),
+    });
 
-      const data = await res.json();
-      return data;
-    } catch (err) {
-      throw err;
-    }
+    const data = await res.json();
+    return data;
   }
 
   private ext(sha: string, version = 1) {

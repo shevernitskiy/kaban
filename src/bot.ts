@@ -8,7 +8,8 @@ import { config } from "./config.ts";
 
 export const bot = new Bot(config.telegram.token!);
 
-bot.filter((ctx) => ctx.hasChatType("private") && config.admin.includes(ctx.from.id))
+bot
+  .filter((ctx) => ctx.hasChatType("private") && config.admin.includes(ctx.from.id))
   .hears(/[А|а]нонс[\s]*(.*)*/, async (ctx) => {
     const tw = new Twitch(config.twitch.channel!);
     const tg = new Telegram(config.telegram.token!, config.telegram.channel_id!, config.twitch.channel!);
