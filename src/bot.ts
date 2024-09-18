@@ -11,7 +11,7 @@ export const bot = new Bot(config.telegram.token!);
 bot.on("message", async (ctx) => {
   if (!ctx.hasChatType("private") || !config.admin.includes(ctx.from.id)) return;
 
-  const text = ctx.message?.text ?? ctx.message?.caption;
+  let text = ctx.message?.text ?? ctx.message?.caption;
 
   if (text === "ping") {
     console.info(`[ping] ${ctx.from.id}`);
@@ -27,7 +27,7 @@ bot.on("message", async (ctx) => {
 
   if (text?.startsWith("анонс") || text?.startsWith("Анонс")) {
     console.log("here");
-    const text_strip = text.replace("анонс", "").replace("Анонс", "").trim();
+    text = text.replace("анонс", "").replace("Анонс", "").trim();
     const tw = new Twitch(config.twitch.channel!);
     const tg = new Telegram(config.telegram.token!, config.telegram.channel_id!, config.twitch.channel!);
     const st = new State(config.db);
@@ -40,12 +40,12 @@ bot.on("message", async (ctx) => {
       console.info(`[delete] result ${result}`);
     }
 
-    const id = await tg.create(info, text_strip);
+    const id = await tg.create(info, text);
     await st.set_post(id, text);
     await st.set_offline_counter(0);
 
     await ctx.reply("✅ анонс создан");
-    console.info(`[create] post ${id} - ${text_strip}`);
+    console.info(`[create] post ${id} - ${text}`);
 
     return;
   }
