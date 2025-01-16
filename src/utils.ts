@@ -1,8 +1,6 @@
 import { difference } from "@std/datetime";
 
-export function isDenoDeploy(): boolean {
-  return Deno.env.get("DENO_DEPLOYMENT_ID") !== undefined;
-}
+export const isDenoDeploy = Deno.env.get("DENO_DEPLOYMENT_ID") !== undefined;
 
 export function duration(dt: number): string {
   const diff = difference(new Date(dt), new Date(), { units: ["hours", "minutes", "seconds"] });

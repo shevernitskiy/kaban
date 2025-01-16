@@ -14,15 +14,3 @@ export type PostState = {
   id: number;
   title?: string;
 };
-
-export type Config = {
-  admin: number[];
-  db: Deno.Kv;
-  telegram: {
-    token?: string;
-    channel_id?: number;
-  };
-  twitch: {
-    channel?: string;
-  };
-};

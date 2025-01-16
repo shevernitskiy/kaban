@@ -1,17 +1,21 @@
 {
+  "tasks": {
+    "start": "deno run -A --env --unstable-kv --unstable-cron ./src/main.ts"
+  },
   "lock": false,
   "fmt": {
     "lineWidth": 120
   },
   "imports": {
-    "@nhttp/nhttp": "jsr:@nhttp/nhttp@^2.0.2",
+    "@hono/hono": "jsr:@hono/hono@^4.6.16",
+    "@shevernitskiy/proxify": "jsr:@shevernitskiy/proxify@^0.0.8",
     "@std/datetime": "jsr:@std/datetime@^0.224.2",
-    "grammy": "https://deno.land/x/grammy@v1.29.0/mod.ts"
+    "grammy": "https://deno.land/x/grammy@v1.34.0/mod.ts"
   },
   "deploy": {
     "project": "ab91130b-5ef4-4b3d-a28f-b78f428a22df",
     "exclude": ["**/node_modules"],
     "include": [],
-    "entrypoint": "src\\server.ts"
+    "entrypoint": "src\\main.ts"
   }
 }
