@@ -56,11 +56,6 @@ if (!isDenoDeploy) {
 
   server.get("/", (c) => c.text("Ok"));
 
-  server.get("/schedule", async (c) => {
-    await schedule();
-    return c.text("Ok, schedule");
-  });
-
   server.post("/telegram", (c) => {
     return streamText(c, async (stream) => {
       await stream.writeln("Ok");
