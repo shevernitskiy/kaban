@@ -1,18 +1,17 @@
-import { Bot, webhookCallback, GrammyError, HttpError } from "grammy";
+import { Bot, GrammyError, HttpError, webhookCallback } from "grammy";
 import { Hono } from "@hono/hono";
 import { streamText } from "@hono/hono/streaming";
 
-import { Telegram } from "./telegram.ts";
-import { Twitch } from "./twitch.ts";
-import { getState } from "./state.ts";
 import { isDenoDeploy } from "./utils.ts";
-import { getConfig } from "./config.ts";
-import { schedule } from "./schedule.ts";
+import { schedule } from "./logic.ts";
+import { createAnnounce } from "./logic.ts";
 
 export const bot = new Bot(Deno.env.get("TELEGRAM_TOKEN")!);
 
 bot.on("message", async (ctx) => {
-  if (!ctx.hasChatType("private") || +Deno.env.get("ADMIN")! !== ctx.from.id || +Deno.env.get("STREAMER")! !== ctx.from.id) return;
+  if (
+    !ctx.hasChatType("private") || +Deno.env.get("ADMIN")! !== ctx.from.id || +Deno.env.get("STREAMER")! !== ctx.from.id
+  ) return;
 
   let text = ctx.message?.text ?? ctx.message?.caption;
 
@@ -30,27 +29,9 @@ bot.on("message", async (ctx) => {
 
   if (text?.startsWith("анонс") || text?.startsWith("Анонс")) {
     text = text.replace("анонс", "").replace("Анонс", "").trim();
-    using config = await getConfig();
-    await using state = await getState(config.db);
-
-    const tw = new Twitch(config.twitch.channel!);
-    const tg = new Telegram(config.telegram.token!, config.telegram.channel_id!, config.twitch.channel!);
-    const info = await tw.fetch();
-
-    if (state.telegram.id > 0) {
-      const result = await tg.delete(state.telegram.id);
-      console.info(`[delete] result ${result}`);
-    }
-
-    const id = await tg.create(info, text);
-
-    state.telegram.id = id;
-    state.telegram.title = text;
-    state.offline_counter = 0;
-
+    const id = await createAnnounce(text);
     await ctx.reply("✅ анонс создан");
     console.info(`[create] post ${id} - ${text}`);
-
     return;
   }
 });

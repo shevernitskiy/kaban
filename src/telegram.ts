@@ -44,6 +44,7 @@ export class Telegram {
         { reply_markup: this.button() },
       );
       return typeof res == "boolean" ? message_id : res.message_id;
+      // deno-lint-ignore no-explicit-any
     } catch (err: any) {
       console.error("failed to update message:", err.message);
       if (err.message.includes("MESSAGE_ID_INVALID") || err.message.includes("message to edit not found")) {
@@ -58,6 +59,7 @@ export class Telegram {
     try {
       await this.api.deleteMessage(this.channel_id, message_id);
       return 0;
+      // deno-lint-ignore no-explicit-any
     } catch (err: any) {
       console.error("failed to delete message");
       if (err.message.includes("MESSAGE_ID_INVALID")) {

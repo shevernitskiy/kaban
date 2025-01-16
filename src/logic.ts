@@ -52,3 +52,26 @@ export async function schedule(): Promise<void> {
     }
   }
 }
+
+export async function createAnnounce(text: string): Promise<number> {
+  text = text.replace("анонс", "").replace("Анонс", "").trim();
+  using config = await getConfig();
+  await using state = await getState(config.db);
+
+  const tw = new Twitch(config.twitch.channel!);
+  const tg = new Telegram(config.telegram.token!, config.telegram.channel_id!, config.twitch.channel!);
+  const info = await tw.fetch();
+
+  if (state.telegram.id > 0) {
+    const result = await tg.delete(state.telegram.id);
+    console.info(`[delete] result ${result}`);
+  }
+
+  const id = await tg.create(info, text);
+
+  state.telegram.id = id;
+  state.telegram.title = text;
+  state.offline_counter = 0;
+
+  return id;
+}
