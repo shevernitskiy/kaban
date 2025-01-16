@@ -12,7 +12,7 @@ import { schedule } from "./schedule.ts";
 export const bot = new Bot(Deno.env.get("TELEGRAM_TOKEN")!);
 
 bot.on("message", async (ctx) => {
-  if (!ctx.hasChatType("private") || +Deno.env.get("ADMIN")! !== ctx.from.id) return;
+  if (!ctx.hasChatType("private") || +Deno.env.get("ADMIN")! !== ctx.from.id || +Deno.env.get("STREAMER")! !== ctx.from.id) return;
 
   let text = ctx.message?.text ?? ctx.message?.caption;
 
@@ -35,12 +35,7 @@ bot.on("message", async (ctx) => {
 
     const tw = new Twitch(config.twitch.channel!);
     const tg = new Telegram(config.telegram.token!, config.telegram.channel_id!, config.twitch.channel!);
-    // const st = new State(config.db);
-
     const info = await tw.fetch();
-    // const state = await st.get_post();
-
-
 
     if (state.telegram.id > 0) {
       const result = await tg.delete(state.telegram.id);
@@ -49,13 +44,9 @@ bot.on("message", async (ctx) => {
 
     const id = await tg.create(info, text);
 
-    // await st.set_post(id, text);
-
     state.telegram.id = id;
     state.telegram.title = text;
     state.offline_counter = 0;
-
-    // await st.set_offline_counter(0);
 
     await ctx.reply("✅ анонс создан");
     console.info(`[create] post ${id} - ${text}`);

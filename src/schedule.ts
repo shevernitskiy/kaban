@@ -10,8 +10,6 @@ export async function schedule(): Promise<void> {
   const tw = new Twitch(config.twitch.channel!);
   const tg = new Telegram(config.telegram.token!, config.telegram.channel_id!, config.twitch.channel!);
 
-
-
   if (state.telegram.id === 0) return;
 
   const info = await tw.fetch();
