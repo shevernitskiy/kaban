@@ -10,9 +10,9 @@ const default_state = {
   [proxify.is_mutated]: true,
 };
 
-export async function getState(
-  db: Deno.Kv,
-): Promise<typeof default_state & { [Symbol.asyncDispose]: () => Promise<void> }> {
+export async function getState(): Promise<typeof default_state & { [Symbol.asyncDispose]: () => Promise<void> }> {
+// db: Deno.Kv,
+  const db = await Deno.openKv(Deno.env.get("DENO_DEPLOYMENT_ID") !== undefined ? undefined : "kv.db");
   const state = (await db.get<typeof default_state>(["state"])).value ?? default_state;
 
   return proxify(state, async () => {
@@ -21,5 +21,6 @@ export async function getState(
       state[proxify.is_mutated] = false;
       await db.set(["state"], state);
     }
+    db.close();
   });
 }

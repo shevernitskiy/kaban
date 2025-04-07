@@ -1,11 +1,10 @@
 import { Telegram } from "./telegram.ts";
 import { Twitch } from "./twitch.ts";
 import { getState } from "./state.ts";
-import { getConfig } from "./config.ts";
+import { config } from "./config.ts";
 
 export async function schedule(): Promise<void> {
-  using config = await getConfig();
-  await using state = await getState(config.db);
+  await using state = await getState();
 
   const tw = new Twitch(config.twitch.channel!);
   const tg = new Telegram(config.telegram.token!, config.telegram.channel_id!, config.twitch.channel!);
@@ -55,8 +54,7 @@ export async function schedule(): Promise<void> {
 
 export async function createAnnounce(text: string): Promise<number> {
   text = text.replace("анонс", "").replace("Анонс", "").trim();
-  using config = await getConfig();
-  await using state = await getState(config.db);
+  await using state = await getState();
 
   const tw = new Twitch(config.twitch.channel!);
   const tg = new Telegram(config.telegram.token!, config.telegram.channel_id!, config.twitch.channel!);

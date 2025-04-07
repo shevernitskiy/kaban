@@ -5,13 +5,17 @@ import { streamText } from "@hono/hono/streaming";
 import { isDenoDeploy } from "./utils.ts";
 import { schedule } from "./logic.ts";
 import { createAnnounce } from "./logic.ts";
+import { config } from "./config.ts";
 
-export const bot = new Bot(Deno.env.get("TELEGRAM_TOKEN")!);
+export const bot = new Bot(config.telegram.token!);
 
 bot.on("message", async (ctx) => {
   if (
-    !ctx.hasChatType("private") || +Deno.env.get("ADMIN")! !== ctx.from.id || +Deno.env.get("STREAMER")! !== ctx.from.id
-  ) return;
+    !ctx.hasChatType("private") ||
+    +Deno.env.get("ADMIN")! !== ctx.from.id ||
+    +Deno.env.get("STREAMER")! !== ctx.from.id
+  )
+    return;
 
   let text = ctx.message?.text ?? ctx.message?.caption;
 
@@ -64,7 +68,7 @@ if (!isDenoDeploy) {
     });
   });
 
-  Deno.serve({ port: 8080 }, server.fetch);
+  Deno.serve({ port: 8080, onListen: () => ({}) }, server.fetch);
 }
 
 Deno.cron("reload", "*/2 * * * *", async () => {
