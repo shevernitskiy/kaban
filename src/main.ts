@@ -71,6 +71,6 @@ if (!isDenoDeploy) {
   Deno.serve({ port: 8080, onListen: () => ({}) }, server.fetch);
 }
 
-Deno.cron("reload", "*/2 * * * *", async () => {
-  await schedule();
-});
+// Deno.cron("reload", "*/2 * * * *", async () => {
+//   await schedule();
+// });
